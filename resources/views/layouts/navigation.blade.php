@@ -20,6 +20,9 @@
                             {{ __('Admin') }}
                         </x-nav-link>
                     @endrole
+                    <x-nav-link :href="route('files.index')" :active="request()->routeIs('files.index')">
+                        {{ __('Files') }}
+                    </x-nav-link>
                 </div>
             </div>
 

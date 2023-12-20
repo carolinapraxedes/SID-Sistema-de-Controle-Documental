@@ -38,7 +38,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="" class="btn btn-primary">Change Role</a>
+                                       
                                         <a href="{{ route('admin.show', ['user' => $user->id]) }}"
                                             class="btn btn-primary">Show</a>
                                         <a href="{{ route('admin.edit', ['user' => $user->id]) }}"
