@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
@@ -30,6 +31,15 @@ Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')->grou
     Route::put('/update/{user}', [AdminController::class, 'update'])->name('update');
     Route::delete('/delete/{user}', [AdminController::class, 'delete'])->name('delete');
 });
+
+Route::middleware(['auth'])->name('files.')->prefix('files')->group(function () {
+    Route::get('/', [FileController::class, 'index'])->name('index');
+    Route::get('/generate-pdf', [FileController::class, 'generatePdf'])->name('generate-pdf');
+   
+
+});
+
+
 
 
 Route::middleware('auth')->group(function () {

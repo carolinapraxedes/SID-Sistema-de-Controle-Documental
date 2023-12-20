@@ -25,23 +25,32 @@
                         <tbody>
                             @foreach ($users as $user)
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th scope="row"></th>
                                     <td>{{ $user->name }}</td>
 
                                     <td>
                                         @if ($user->getRoleNames()->isEmpty())
-                                        Dont have
-                                    @else
-                                        @foreach($user->getRoleNames() as $role)
-                                            {{ $role }}
-                                        @endforeach
-                                    @endif
+                                            Dont have
+                                        @else
+                                            @foreach ($user->getRoleNames() as $role)
+                                                {{ $role }}
+                                            @endforeach
+                                        @endif
                                     </td>
                                     <td>
-                                        <a href="" class="btn btn-primary">Change Role</a>
-                                        <a href="{{ route('admin.show',['user' => $user->id]) }}" class="btn btn-primary">Show</a>
-                                        <a href="{{ route('admin.edit',['user' => $user->id]) }}" class="btn btn-primary">Edit</a>
-                                        <a href="{{ route('admin.delete',['user' => $user->id]) }}" class="btn btn-danger">Delete</a>
+                                       
+                                        <a href="{{ route('admin.show', ['user' => $user->id]) }}"
+                                            class="btn btn-primary">Show</a>
+                                        <a href="{{ route('admin.edit', ['user' => $user->id]) }}"
+                                            class="btn btn-primary">Edit</a>
+                                        <!-- Formulário de exclusão -->
+                                        <form action="{{ route('admin.delete', ['user' => $user->id]) }}" method="POST"
+                                            style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                        </form>
 
                                     </td>
                                 </tr>

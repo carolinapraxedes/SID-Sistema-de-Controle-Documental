@@ -30,7 +30,7 @@ class AdminController extends Controller
     public function update(Request $request, User $user)
     {
 
-        dd($request);
+        //dd($request);
         // Atualiza os dados do usuário
         $user->update([
             'name' => $request->input('name'),
@@ -43,8 +43,13 @@ class AdminController extends Controller
     }
     public function delete(User $user)
     {
+        //dd($users);
+        $user->roles()->detach();
+        // Excluir o usuário
+        $user->delete();
+
         $users = User::with('roles')->get();
-        // dd($users);
+
         return view('admin.index', compact('users'));
     }
 }
