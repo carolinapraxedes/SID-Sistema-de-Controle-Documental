@@ -35,7 +35,7 @@ Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')->grou
 Route::middleware(['auth'])->name('files.')->prefix('files')->group(function () {
     Route::get('/', [FileController::class, 'index'])->name('index');
     Route::get('/generate-pdf', [FileController::class, 'generatePdf'])->name('generate-pdf');
-   
+
 
 });
 

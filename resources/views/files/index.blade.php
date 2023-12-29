@@ -17,18 +17,15 @@
                         </thead>
                         <tbody>
                             <tr>
-                                
+
                                 <td>1</td>
                                 <td>My PDF</td>
                                 <td>
-                                    <a href="{{ route('files.generate-pdf') }}" class="btn btn-primary">View</a>
+                                    <a href="assinado.pdf" class="btn btn-primary">View</a>
                                     @role('user')
-                                        <a href=""
+                                        <a href="{{ route('files.generate-pdf') }}"
                                         class="btn btn-primary">Sign</a>
                                     @endrole
-                                        
-
-                                    
                                 </td>
                             </tr>
                         </tbody>

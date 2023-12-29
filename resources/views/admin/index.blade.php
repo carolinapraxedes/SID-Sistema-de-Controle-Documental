@@ -38,7 +38,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                       
+
                                         <a href="{{ route('admin.show', ['user' => $user->id]) }}"
                                             class="btn btn-primary">Show</a>
                                         <a href="{{ route('admin.edit', ['user' => $user->id]) }}"

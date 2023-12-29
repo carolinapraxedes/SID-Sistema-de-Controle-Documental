@@ -7,12 +7,14 @@
     "require": {
         "php": "^8.0",
         "barryvdh/laravel-dompdf": "^2.0",
+        "elibyy/tcpdf-laravel": "^10.0",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "phpseclib/phpseclib": "^3.0",
         "spatie/laravel-permission": "^6.2"
     },
     "require-dev": {

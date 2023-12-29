@@ -3,50 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+//use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Document;
+use PDF;
+
 
 class FileController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         return view('files.index');
     }
 
-    public function generatePdf()
-    {
 
-        // Obtenha o usuário autenticado
-        $user = Auth::user();
 
-        // Dados a serem criptografados
-        $dadosDocumento = ['nomeUsuario' => $user->name];
+    public function generatePdf(Request $request){
+        //PDF::SetPrintHeader(false);
+        //PDF::SetPrintFooter(false);
+        $certificate = 'file://'.base_path().'/storage/app/certificate/certificate.pem';
+            // set additional information in the signature
+        $info = array(
+            'Name' => 'Rafaela Micaela',
+            'Location' => 'Brazil',
+            'Reason' => 'Generate Demo PDF',
+            'ContactInfo' => '',
+        );
+        PDF::setSignature($certificate, $certificate, 'tcpdfdemo', '', 2, $info);
+        PDF::SetFont('helvetica', '', 12);
+        PDF::SetCreator('Rafaela Micaela');
+        PDF::SetTitle('new-pdf');
+        PDF::SetAuthor('rafaela');
+        PDF::SetSubject('Generated PDF');
+        PDF::AddPage();
+        $html = '<div>
+            <h1>What is Lorem Ipsum?</h1>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+            Lorem Ipsum has been the industry`s standard dummy text ever since the 1500s,
+            when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
+            sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like
+            Aldus PageMaker including versions of Lorem Ipsum.
+        </div>';
 
-        // Criptografe os dados do documento
-        $dadosCriptografados = Crypt::encrypt(json_encode($dadosDocumento));
+        $documentoCriptografado = encrypt($html);
+        // Descriptografar dados
+        $documentoDescriptografado = decrypt($documentoCriptografado);
+        PDF::writeHTML($documentoDescriptografado, true, false, true, false, '');
+        //PDF::Image('kaushalkushwaha.png', 5, 75, 40, 15, 'PNG');
+        PDF::setSignatureAppearance(5, 75, 40, 15);
+        PDF::Output(public_path('assinado.pdf'), 'F');
+        PDF::reset();
 
-        // Calcula o hash do conteúdo do PDF
-        $hash = hash('sha256', $dadosCriptografados);
+        echo "PDF Generated Successfully";
 
-        // Carregue a view do PDF e passe os dados criptografados e o hash como variáveis
-        $pdf = PDF::loadView('files.pdf', ['dadosCriptografados' => $dadosCriptografados, 'hash' => $hash]);
+        $conteudoDoDocumento = file_get_contents(public_path('assinado.pdf')); // conteúdo do documento (hash do dicumento)
+        $hashDoDocumento = hash('sha256', $conteudoDoDocumento);
 
-        // Obtém o conteúdo do PDF como string
-        $pdfContent = $pdf->output();
+        Document::create([
+        'title' => 'Hash do documento',
+        'hash' => $hashDoDocumento,
+        ]);
 
-       
 
-        // Retorna o PDF para visualização no navegador (ou para download) com o hash incluído nos cabeçalhos
-        return response($pdfContent)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="documento.pdf"')
-            ->header('Content-Length', strlen($pdfContent))
-            ->header('X-Hash', $hash);
- 
+        echo $hashDoDocumento;
+
+
+
     }
-
-   
-    
 }
